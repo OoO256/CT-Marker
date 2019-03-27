@@ -7,6 +7,7 @@
 ```
 you can install it as command
 pip install openpyxl
+on your cmd or sth
 ```
 #### student_info.xlsx
 ``` 
