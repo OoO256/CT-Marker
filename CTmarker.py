@@ -21,7 +21,9 @@ def get_file_list(dir):
     return os.listdir(dir)
 
 if __name__ == '__main__':
-
+    print('만든사람 이용욱, qjrmsktso2@gmail.com')
+    print('채점 결과에 대해 어떠한 책임도 지지 않습니다.')
+    
     wrong_list = []
     not_submit_list = []
     file_list = get_file_list('./')
