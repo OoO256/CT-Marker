@@ -21,7 +21,7 @@ def get_students_info():
     return zip(name_list, id_list)
 
 def getAnswer(prob_input):
-    return check_output([sys.executable, './answer.py' ],
+    return check_output([sys.executable, './solution.py' ],
                     input=prob_input,
                     universal_newlines=True)
 
