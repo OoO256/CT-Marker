@@ -3,14 +3,13 @@
 ## 요구사항
 
 #### python3
+
 #### openpyxl
 ```
-you can install it as command
-
 pip install openpyxl
-on your cmd or sth
-
+등등...
 ```
+
 #### student_info.xlsx
 ``` 
 학생들의 이름, 학번이 적힌 액셀 파일
@@ -18,9 +17,28 @@ on your cmd or sth
 학번은 C3셀부터 열 방향으로 추가되어야 합니다.
 
 서강대학교 조교 페이지에서는 수강생 메뉴에서 엑셀로 정보 가져오기를 통해 받으실 수 있습니다.
+이 때에는 .xls파일을 내려받게 되는데, '다른 이름으로 저장'을 통해 .xlsx파일로 바꾸어주셔야 합니다. 
 이 외의 경우 직접 엑셀 파일을 양식에 맞추어 만들어야 합니다
 
 이 때 CTmarker.py에서 num_std 를 엑셀 파일의 학생 수에 맞게 수정해주세요
+```
+
+#### solution.py
+``` 
+정답 코드
+CTmarker.py와 같은 폴더에 있어야 합니다.
+```
+
+#### 기타 설정할 사항
+```
+읽어올 파일 이름의 양식은 코드를 직접 수정하여 설정해주셔야 합니다
+51~53 번 라인을 보면,
+
+for file in file_list:
+  if (('H4_1_'+id) in file):
+    target_file = file
+
+H4_1_학번 이 파일명에 포합되면 읽어온다는 것을 아실 수 있습니다.
 ```
 
 ## 주의
