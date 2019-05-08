@@ -38,7 +38,7 @@ for file in file_list:
   if (('H4_1_'+id) in file):
     target_file = file
 
-H4_1_학번 이 파일명에 포합되면 읽어온다는 것을 아실 수 있습니다.
+"H4_1_학번" 이 파일명에 포합되면 읽어온다는 것을 아실 수 있습니다.
 ```
 
 ## 주의
