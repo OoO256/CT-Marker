@@ -3,3 +3,5 @@
 PyQt5 버젼 개발중...
 
 master branch를 이용해주세요
+
+https://wikidocs.net/21952
