@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QLabel, QLineEdit, QTextEdit, QFileDialog, QMainWindow, QInputDialog
+from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QLabel, QLineEdit, QTextEdit, QFileDialog, QMainWindow, QInputDialog, QPushButton
 
 
 class MyApp(QWidget):
@@ -13,6 +13,7 @@ class MyApp(QWidget):
         grid = QGridLayout()
         self.setLayout(grid)
 
+
         grid.addWidget(QLabel('채점할 폴더 : '), 0, 0)
         grid.addWidget(QLabel('학생 정보 엑셀 파일 : '), 1, 0)
         grid.addWidget(QLabel('학생 수 : '), 2, 0)
@@ -23,24 +24,25 @@ class MyApp(QWidget):
 
         grid.addWidget(QLineEdit(), 0, 1)
         grid.addWidget(QLineEdit(), 1, 1)
-        grid.addWidget(QTextEdit(), 2, 1)
+        grid.addWidget(QLineEdit(), 2, 1)
         grid.addWidget(QTextEdit(), 3, 1)
         grid.addWidget(QTextEdit(), 4, 1)
         grid.addWidget(QTextEdit(), 5, 1)
         grid.addWidget(QTextEdit(), 6, 1)
 
-        self.setWindowTitle('QGridLayout')
+        grid.addWidget(QPushButton('Show text', self), 0, 2)
+        grid.addWidget(QPushButton('Show text', self), 1, 2)
+
+        self.setWindowTitle('CT marker')
         self.setGeometry(300, 300, 300, 200)
+        self.getDirectory()
         self.show()
-        self.openFileNamesDialog()
 
         
-    def openFileNamesDialog(self):
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        files, _ = QFileDialog.getOpenFileNames(self,"QFileDialog.getOpenFileNames()", "","All Files (*);;Python Files (*.py)", options=options)
-        if files:
-            print(files)
+    def getDirectory(self):
+        file = str(QFileDialog.getExistingDirectory(self, "Select Directory"))
+        print(file)
+        return file
 
     def getTextInput(self):
         return QInputDialog.getText(self, 'Input Dialog', 'Enter your name:')
