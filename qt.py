@@ -1,5 +1,7 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QLabel, QLineEdit, QTextEdit, QFileDialog, QMainWindow, QInputDialog, QPushButton
+import CTmarker as marker
+
 
 class MyApp(QWidget):
 
@@ -9,10 +11,12 @@ class MyApp(QWidget):
         self.buttons = {}
         self.buttons['hw'] = QPushButton('...', self)
         self.buttons['excel'] = QPushButton('...', self)
+        self.buttons['solution'] = QPushButton('...', self)
         self.buttons['mark'] = QPushButton('체점하기', self)
 
         self.buttons['hw'].clicked.connect(self.get_path_hw)
         self.buttons['excel'].clicked.connect(self.get_path_excel)
+        self.buttons['solution'].clicked.connect(self.get_path_solution)
         self.buttons['mark'].clicked.connect(self.mark)
 
 
@@ -20,6 +24,7 @@ class MyApp(QWidget):
         self.lines['hw'] = QLineEdit()
         self.lines['excel'] = QLineEdit()
         self.lines['num'] = QLineEdit()
+        self.lines['solution'] = QLineEdit()
 
         self.inputs = []
         self.inputs.append(QTextEdit())
@@ -29,6 +34,7 @@ class MyApp(QWidget):
 
         self.path_hw = ''
         self.path_excel = ''
+        self.path_solution = ''
         self.num_stu = 0
 
         self.init_UI()
@@ -41,22 +47,25 @@ class MyApp(QWidget):
         grid.addWidget(QLabel('채점할 폴더 : '), 0, 0)
         grid.addWidget(QLabel('학생 정보 엑셀 파일 : '), 1, 0)
         grid.addWidget(QLabel('학생 수 : '), 2, 0)
-        grid.addWidget(QLabel('입력 1 : '), 3, 0)
-        grid.addWidget(QLabel('입력 2 : '), 4, 0)
-        grid.addWidget(QLabel('입력 3 : '), 5, 0)
-        grid.addWidget(QLabel('입력 4 : '), 6, 0)
-        grid.addWidget(self.buttons['mark'], 7, 0)
+        grid.addWidget(QLabel('정답 코드 파일 : '), 3, 0)
+        grid.addWidget(QLabel('입력 1 : '), 4, 0)
+        grid.addWidget(QLabel('입력 2 : '), 5, 0)
+        grid.addWidget(QLabel('입력 3 : '), 6, 0)
+        grid.addWidget(QLabel('입력 4 : '), 7, 0)
+        grid.addWidget(self.buttons['mark'], 8, 0)
 
         grid.addWidget(self.lines['hw'], 0, 1)
         grid.addWidget(self.lines['excel'], 1, 1)
         grid.addWidget(self.lines['num'], 2, 1)
-        grid.addWidget(self.inputs[0], 3, 1)
-        grid.addWidget(self.inputs[1], 4, 1)
-        grid.addWidget(self.inputs[2], 5, 1)
-        grid.addWidget(self.inputs[3], 6, 1)
+        grid.addWidget(self.lines['solution'], 3, 1)
+        grid.addWidget(self.inputs[0], 4, 1)
+        grid.addWidget(self.inputs[1], 5, 1)
+        grid.addWidget(self.inputs[2], 6, 1)
+        grid.addWidget(self.inputs[3], 7, 1)
 
         grid.addWidget(self.buttons['hw'], 0, 2)
         grid.addWidget(self.buttons['excel'], 1, 2)
+        grid.addWidget(self.buttons['solution'], 3, 2)
 
         self.setWindowTitle('CT marker')
         self.setGeometry(300, 300, 300, 200)
@@ -74,6 +83,10 @@ class MyApp(QWidget):
         self.path_excel = str(QFileDialog.getOpenFileName(self,"get_path_excel", "" ,"Excel Files (*.xlsx)")[0])
         self.lines['excel'].setText(self.path_excel)
 
+    def get_path_solution(self):
+        self.path_solution = str(QFileDialog.getOpenFileName(self, "get_path_solution", "", "Python Files (*.py)")[0])
+        self.lines['solution'].setText(self.path_solution)
+
     def mark(self):
         string_stu = self.lines['num'].text()
         try:
@@ -81,6 +94,15 @@ class MyApp(QWidget):
         except:
             print("잘못된 학생수입니다.")
             pass
+
+        for i in self.inputs:
+            if i.toPlainText() is '':
+                break
+
+            marker.mark(prob_input=i.toPlainText(), path_hw = self.path_hw, path_excel = self.path_excel, path_solution = self.path_solution, hw_filename = 'H8_2_{id}', num_std = self.num_stu)
+
+
+
 
 
 if __name__ == '__main__':

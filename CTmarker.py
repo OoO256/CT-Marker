@@ -3,11 +3,8 @@ import sys
 from openpyxl import load_workbook
 from subprocess import check_output
 
-num_std = 55
-prob_answer = ''
-
-def get_students_info():
-    wb = load_workbook('student_info.xlsx')
+def get_students_info(path_excel, num_std):
+    wb = load_workbook(path_excel)
     sheet = wb['excel']
 
     name_list = [sheet['B'+str(i+3)].value for i in range(num_std)]
@@ -15,57 +12,48 @@ def get_students_info():
 
     print("name list : ", name_list)
     print("id list : ", id_list)
-
-    num_std
     
     return zip(name_list, id_list)
 
-def getAnswer(prob_input):
-    return check_output([sys.executable, './solution.py' ],
+def getAnswer(prob_input, path_solution):
+    return check_output([sys.executable, path_solution],
                     input=prob_input,
                     universal_newlines=True)
 
-
-if __name__ == '__main__':
+def mark(prob_input, path_hw, path_excel, path_solution, hw_filename, num_std):
     print('만든사람 이용욱, qjrmsktso2@gmail.com')
     print('채점 결과에 대해 어떠한 책임도 지지 않습니다.')
-    print('\n'+'-'*80)
-    
-    prob_input = input('체점할 입력을 입력해주세요 : ')
-    path_assignments = input('과제 파일의 경로를 문자열의 마지막에 \ 문자 없이 입력해주세요 : ')
     print('\n'+'-'*80)
     
     runtime_error_list = []
     wrong_dict = {}
     not_submit_list = []
-
     
-    file_list = os.listdir(path_assignments)
+    file_list = os.listdir(path_hw)
 
-    info = get_students_info();
+    info = get_students_info(path_excel, num_std)
 
     for name, id in info:
         print(name, '학생 : ', id)
 
         target_file = ''
         for file in file_list:
-            if (('H4_1_'+id) in file):
+            if hw_filename.format(id=id, name=name) in file:
                 target_file = file
-
        
-        if(target_file == ''):
+        if target_file == '':
             not_submit_list.append(name)
             print('미제출!')
         
         else:
-            prob_answer = getAnswer(prob_input)
+            prob_answer = getAnswer(prob_input, path_solution)
 
             try:
-                output = check_output([sys.executable, path_assignments+'/'+target_file],
+                output = check_output([sys.executable, path_hw+'/'+target_file],
                     input=prob_input,
                     universal_newlines=True)
         
-                if (prob_answer == output):
+                if prob_answer == output:
                     print('정답')
                 else:
                     print('오답')
@@ -88,4 +76,3 @@ if __name__ == '__main__':
         print(name)
         print(answer, end='')
         print(prob_answer, end='')
-        
