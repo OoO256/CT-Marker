@@ -43,38 +43,43 @@ class MyApp(QWidget):
 
 
     def init_UI(self):
-        grid = QGridLayout()
-        self.setLayout(grid)
+        self.grid = QGridLayout()
+        self.setLayout(self.grid)
         
-        grid.addWidget(QLabel('체점할 폴더 : '), 0, 0)
-        grid.addWidget(QLabel('파일명 양식 : '), 1, 0)
-        grid.addWidget(QLabel('학생 정보 엑셀 파일 : '), 2, 0)
-        grid.addWidget(QLabel('학생 수 : '), 3, 0)
-        grid.addWidget(QLabel('정답 코드 파일 : '), 4, 0)
-        grid.addWidget(QLabel('입력 1 : '), 5, 0)
-        grid.addWidget(QLabel('입력 2 : '), 6, 0)
-        grid.addWidget(QLabel('입력 3 : '), 7, 0)
-        grid.addWidget(QLabel('입력 4 : '), 8, 0)
-        grid.addWidget(self.buttons['mark'], 9, 0)
+        self.grid.addWidget(QLabel('체점할 폴더 : '), 0, 0)
+        self.grid.addWidget(QLabel('파일명 양식 : '), 1, 0)
+        self.grid.addWidget(QLabel('학생 정보 엑셀 파일 : '), 2, 0)
+        self.grid.addWidget(QLabel('학생 수 : '), 3, 0)
+        self.grid.addWidget(QLabel('정답 코드 파일 : '), 4, 0)
+        self.grid.addWidget(QLabel('입력 1 : '), 5, 0)
+        self.grid.addWidget(QLabel('입력 2 : '), 6, 0)
+        self.grid.addWidget(QLabel('입력 3 : '), 7, 0)
+        self.grid.addWidget(QLabel('입력 4 : '), 8, 0)
+        self.grid.addWidget(self.buttons['mark'], 9, 0)
 
-        grid.addWidget(self.lines['hw'], 0, 1)
-        grid.addWidget(self.lines['filename'], 1, 1)
-        grid.addWidget(self.lines['excel'], 2, 1)
-        grid.addWidget(self.lines['num'], 3, 1)
-        grid.addWidget(self.lines['solution'], 4, 1)
-        grid.addWidget(self.inputs[0], 5, 1)
-        grid.addWidget(self.inputs[1], 6, 1)
-        grid.addWidget(self.inputs[2], 7, 1)
-        grid.addWidget(self.inputs[3], 8, 1)
+        self.grid.addWidget(self.lines['hw'], 0, 1)
+        self.grid.addWidget(self.lines['filename'], 1, 1)
+        self.grid.addWidget(self.lines['excel'], 2, 1)
+        self.grid.addWidget(self.lines['num'], 3, 1)
+        self.grid.addWidget(self.lines['solution'], 4, 1)
+        self.grid.addWidget(self.inputs[0], 5, 1)
+        self.grid.addWidget(self.inputs[1], 6, 1)
+        self.grid.addWidget(self.inputs[2], 7, 1)
+        self.grid.addWidget(self.inputs[3], 8, 1)
 
-        grid.addWidget(self.buttons['hw'], 0, 2)
-        grid.addWidget(self.buttons['excel'], 2, 2)
-        grid.addWidget(self.buttons['solution'], 4, 2)
+        self.grid.addWidget(self.buttons['hw'], 0, 2)
+        self.grid.addWidget(self.buttons['excel'], 2, 2)
+        self.grid.addWidget(self.buttons['solution'], 4, 2)
 
         self.setWindowTitle('CT marker')
         self.setGeometry(300, 300, 300, 200)
         self.resize(600, 400)
         self.show()
+
+    
+    def AddLine(self, name, box = 'line', button = None):
+        pass
+        
 
     def getTextInput(self):
         return QInputDialog.getText(self, 'Input Dialog', 'Enter your name:')
