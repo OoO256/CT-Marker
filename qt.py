@@ -25,6 +25,7 @@ class MyApp(QWidget):
         self.lines['excel'] = QLineEdit()
         self.lines['num'] = QLineEdit()
         self.lines['solution'] = QLineEdit()
+        self.lines['filename'] = QLineEdit()
 
         self.inputs = []
         self.inputs.append(QTextEdit())
@@ -57,17 +58,18 @@ class MyApp(QWidget):
         grid.addWidget(self.buttons['mark'], 9, 0)
 
         grid.addWidget(self.lines['hw'], 0, 1)
-        grid.addWidget(self.lines['excel'], 1, 1)
-        grid.addWidget(self.lines['num'], 2, 1)
-        grid.addWidget(self.lines['solution'], 3, 1)
-        grid.addWidget(self.inputs[0], 4, 1)
-        grid.addWidget(self.inputs[1], 5, 1)
-        grid.addWidget(self.inputs[2], 6, 1)
-        grid.addWidget(self.inputs[3], 7, 1)
+        grid.addWidget(self.lines['filename'], 1, 1)
+        grid.addWidget(self.lines['excel'], 2, 1)
+        grid.addWidget(self.lines['num'], 3, 1)
+        grid.addWidget(self.lines['solution'], 4, 1)
+        grid.addWidget(self.inputs[0], 5, 1)
+        grid.addWidget(self.inputs[1], 6, 1)
+        grid.addWidget(self.inputs[2], 7, 1)
+        grid.addWidget(self.inputs[3], 8, 1)
 
         grid.addWidget(self.buttons['hw'], 0, 2)
-        grid.addWidget(self.buttons['excel'], 1, 2)
-        grid.addWidget(self.buttons['solution'], 3, 2)
+        grid.addWidget(self.buttons['excel'], 2, 2)
+        grid.addWidget(self.buttons['solution'], 4, 2)
 
         self.setWindowTitle('CT marker')
         self.setGeometry(300, 300, 300, 200)
@@ -101,10 +103,7 @@ class MyApp(QWidget):
             if i.toPlainText() is '':
                 break
 
-            marker.mark(prob_input=i.toPlainText(), path_hw = self.path_hw, path_excel = self.path_excel, path_solution = self.path_solution, hw_filename = 'H8_2_{id}', num_std = self.num_stu)
-
-
-
+            marker.mark(prob_input=i.toPlainText(), path_hw = self.path_hw, path_excel = self.path_excel, path_solution = self.path_solution, hw_filename = self.filename, num_std = self.num_stu)
 
 
 if __name__ == '__main__':
