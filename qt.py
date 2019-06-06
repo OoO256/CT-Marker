@@ -1,6 +1,6 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QLabel, QLineEdit, QTextEdit, QFileDialog, QMainWindow, QInputDialog, QPushButton
-import CTmarker as marker
+import marker
 
 
 class MyApp(QWidget):
@@ -36,6 +36,7 @@ class MyApp(QWidget):
         self.path_excel = ''
         self.path_solution = ''
         self.num_stu = 0
+        self.filename = ''
 
         self.init_UI()
 
@@ -43,16 +44,17 @@ class MyApp(QWidget):
     def init_UI(self):
         grid = QGridLayout()
         self.setLayout(grid)
-
-        grid.addWidget(QLabel('채점할 폴더 : '), 0, 0)
-        grid.addWidget(QLabel('학생 정보 엑셀 파일 : '), 1, 0)
-        grid.addWidget(QLabel('학생 수 : '), 2, 0)
-        grid.addWidget(QLabel('정답 코드 파일 : '), 3, 0)
-        grid.addWidget(QLabel('입력 1 : '), 4, 0)
-        grid.addWidget(QLabel('입력 2 : '), 5, 0)
-        grid.addWidget(QLabel('입력 3 : '), 6, 0)
-        grid.addWidget(QLabel('입력 4 : '), 7, 0)
-        grid.addWidget(self.buttons['mark'], 8, 0)
+        
+        grid.addWidget(QLabel('체점할 폴더 : '), 0, 0)
+        grid.addWidget(QLabel('파일명 양식 : '), 1, 0)
+        grid.addWidget(QLabel('학생 정보 엑셀 파일 : '), 2, 0)
+        grid.addWidget(QLabel('학생 수 : '), 3, 0)
+        grid.addWidget(QLabel('정답 코드 파일 : '), 4, 0)
+        grid.addWidget(QLabel('입력 1 : '), 5, 0)
+        grid.addWidget(QLabel('입력 2 : '), 6, 0)
+        grid.addWidget(QLabel('입력 3 : '), 7, 0)
+        grid.addWidget(QLabel('입력 4 : '), 8, 0)
+        grid.addWidget(self.buttons['mark'], 9, 0)
 
         grid.addWidget(self.lines['hw'], 0, 1)
         grid.addWidget(self.lines['excel'], 1, 1)
