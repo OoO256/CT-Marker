@@ -1,8 +1,10 @@
 # 컴퓨팅사고력 조교를 위한 채점 프로그램
 
-PyQt5 버젼 개발중...
+![](.\capture.PNG)
 
-master branch를 이용해주세요
+
+
+
 
 ### 참고용 사이트
 PyQt5 tutorials : https://wikidocs.net/21952

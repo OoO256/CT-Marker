@@ -18,7 +18,6 @@ class MyApp(QWidget):
         self.path_excel = ''
         self.path_solution = ''
         self.num_stu = 0
-        self.filename = ''
 
         self.init_UI()
 
@@ -80,11 +79,15 @@ class MyApp(QWidget):
             print("잘못된 학생수입니다.")
             pass
 
-        for i in self.inputs:
-            if i.toPlainText() is '':
+        file_form = self.lines['filename'].text()
+        for i in range(4):
+            if self.inputs[i].toPlainText() is '':
                 break
 
-            marker.mark(prob_input=i.toPlainText(), path_hw = self.path_hw, path_excel = self.path_excel, path_solution = self.path_solution, hw_filename = self.filename, num_std = self.num_stu)
+            prob_inputs = self.inputs[i].toPlainText().split('//')
+            prob_inputs = '\n'.join(prob_inputs)
+
+            marker.mark(prob_input=prob_inputs, path_hw = self.path_hw, path_excel = self.path_excel, path_solution = self.path_solution, hw_filename = file_form, num_std = self.num_stu)
 
 
 if __name__ == '__main__':

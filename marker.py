@@ -18,7 +18,9 @@ def get_students_info(path_excel, num_std):
 def getAnswer(prob_input, path_solution):
     return check_output([sys.executable, path_solution],
                     input=prob_input,
-                    universal_newlines=True)
+                    universal_newlines=True,
+                    shell=True,
+                    encoding='utf-8')
 
 def mark(prob_input, path_hw, path_excel, path_solution, hw_filename, num_std):
     print('만든사람 이용욱, qjrmsktso2@gmail.com')
@@ -51,7 +53,8 @@ def mark(prob_input, path_hw, path_excel, path_solution, hw_filename, num_std):
             try:
                 output = check_output([sys.executable, path_hw+'/'+target_file],
                     input=prob_input,
-                    universal_newlines=True)
+                    universal_newlines=True,
+                    encoding='utf-8')
         
                 if prob_answer == output:
                     print('정답')
