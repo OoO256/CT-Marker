@@ -2,6 +2,8 @@ import os
 import sys
 from openpyxl import load_workbook
 from subprocess import check_output
+import difflib
+from pprint import pprint
 
 def get_students_info(path_excel, num_std):
     wb = load_workbook(path_excel)
@@ -77,5 +79,9 @@ def mark(prob_input, path_hw, path_excel, path_solution, hw_filename, num_std):
         print()
         print('-'*20)
         print(name)
-        print(answer, end='')
-        print(prob_answer, end='')
+        #print(answer)
+        #print(prob_answer)
+
+        d = difflib.Differ()
+        result = list(d.compare(answer.splitlines(keepends=True), prob_answer.splitlines(keepends=True)))
+        pprint(result)
