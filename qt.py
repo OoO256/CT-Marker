@@ -9,29 +9,10 @@ class MyApp(QWidget):
         super().__init__()
 
         self.buttons = {}
-        self.buttons['hw'] = QPushButton('...', self)
-        self.buttons['excel'] = QPushButton('...', self)
-        self.buttons['solution'] = QPushButton('...', self)
-        self.buttons['mark'] = QPushButton('체점하기', self)
-
-        self.buttons['hw'].clicked.connect(self.get_path_hw)
-        self.buttons['excel'].clicked.connect(self.get_path_excel)
-        self.buttons['solution'].clicked.connect(self.get_path_solution)
+        self.buttons['mark'] = QPushButton('mark', self)
         self.buttons['mark'].clicked.connect(self.mark)
-
-
         self.lines = {}
-        self.lines['hw'] = QLineEdit()
-        self.lines['excel'] = QLineEdit()
-        self.lines['num'] = QLineEdit()
-        self.lines['solution'] = QLineEdit()
-        self.lines['filename'] = QLineEdit()
-
         self.inputs = []
-        self.inputs.append(QTextEdit())
-        self.inputs.append(QTextEdit())
-        self.inputs.append(QTextEdit())
-        self.inputs.append(QTextEdit())
 
         self.path_hw = ''
         self.path_excel = ''
@@ -45,31 +26,17 @@ class MyApp(QWidget):
     def init_UI(self):
         self.grid = QGridLayout()
         self.setLayout(self.grid)
-        
-        self.grid.addWidget(QLabel('체점할 폴더 : '), 0, 0)
-        self.grid.addWidget(QLabel('파일명 양식 : '), 1, 0)
-        self.grid.addWidget(QLabel('학생 정보 엑셀 파일 : '), 2, 0)
-        self.grid.addWidget(QLabel('학생 수 : '), 3, 0)
-        self.grid.addWidget(QLabel('정답 코드 파일 : '), 4, 0)
-        self.grid.addWidget(QLabel('입력 1 : '), 5, 0)
-        self.grid.addWidget(QLabel('입력 2 : '), 6, 0)
-        self.grid.addWidget(QLabel('입력 3 : '), 7, 0)
-        self.grid.addWidget(QLabel('입력 4 : '), 8, 0)
+
+        self.addLine(0, 'submit', '체점할 폴더 : ', 'line', button='선택',  callback=self.get_path_hw)
+        self.addLine(1, 'filename', '파일명 양식 : ', 'line')
+        self.addLine(2, 'excel', '학생 정보 엑셀 파일 : ', 'line', button='선택', callback=self.get_path_excel)
+        self.addLine(3, 'num_stu', '학생 수 : ', 'line')
+        self.addLine(4, 'solution', '정답 코드 파일 : ', 'line', button='선택', callback=self.get_path_solution)
+        self.addLine(5, 'input1', '입력 1 : ', 'text')
+        self.addLine(6, 'input1', '입력 2 : ', 'text')
+        self.addLine(7, 'input1', '입력 3 : ', 'text')
+        self.addLine(8, 'input1', '입력 4 : ', 'text')
         self.grid.addWidget(self.buttons['mark'], 9, 0)
-
-        self.grid.addWidget(self.lines['hw'], 0, 1)
-        self.grid.addWidget(self.lines['filename'], 1, 1)
-        self.grid.addWidget(self.lines['excel'], 2, 1)
-        self.grid.addWidget(self.lines['num'], 3, 1)
-        self.grid.addWidget(self.lines['solution'], 4, 1)
-        self.grid.addWidget(self.inputs[0], 5, 1)
-        self.grid.addWidget(self.inputs[1], 6, 1)
-        self.grid.addWidget(self.inputs[2], 7, 1)
-        self.grid.addWidget(self.inputs[3], 8, 1)
-
-        self.grid.addWidget(self.buttons['hw'], 0, 2)
-        self.grid.addWidget(self.buttons['excel'], 2, 2)
-        self.grid.addWidget(self.buttons['solution'], 4, 2)
 
         self.setWindowTitle('CT marker')
         self.setGeometry(300, 300, 300, 200)
@@ -77,16 +44,25 @@ class MyApp(QWidget):
         self.show()
 
     
-    def AddLine(self, name, box = 'line', button = None):
-        pass
-        
+    def addLine(self, idx, name, text, box = 'line', button = None, callback = None):
+        self.grid.addWidget(QLabel(text), idx, 0)
 
-    def getTextInput(self):
-        return QInputDialog.getText(self, 'Input Dialog', 'Enter your name:')
+        if box is 'line':
+            self.lines[name] = QLineEdit()
+            self.grid.addWidget(self.lines[name], idx, 1)
+        elif box is 'text':
+            self.inputs.append(QTextEdit())
+            self.grid.addWidget(self.inputs[len(self.inputs) - 1], idx, 1)
+
+        if button is not None:
+            self.buttons[name] = QPushButton(button, self)
+            self.grid.addWidget(self.buttons[name], idx, 2)
+
+            self.buttons[name].clicked.connect(callback)
 
     def get_path_hw(self):
         self.path_hw = str(QFileDialog.getExistingDirectory(self, "Select Directory"))
-        self.lines['hw'].setText(self.path_hw)
+        self.lines['submit'].setText(self.path_hw)
 
     def get_path_excel(self):
         self.path_excel = str(QFileDialog.getOpenFileName(self,"get_path_excel", "" ,"Excel Files (*.xlsx)")[0])
@@ -97,7 +73,7 @@ class MyApp(QWidget):
         self.lines['solution'].setText(self.path_solution)
 
     def mark(self):
-        string_stu = self.lines['num'].text()
+        string_stu = self.lines['num_stu'].text()
         try:
             self.num_stu = int(string_stu)
         except:
