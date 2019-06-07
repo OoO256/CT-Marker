@@ -83,5 +83,5 @@ def mark(prob_input, path_hw, path_excel, path_solution, hw_filename, num_std):
         #print(prob_answer)
 
         d = difflib.Differ()
-        result = list(d.compare(answer.splitlines(keepends=True), prob_answer.splitlines(keepends=True)))
+        result = list(d.compare(prob_answer.splitlines(keepends=True), answer.splitlines(keepends=True)))
         pprint(result)
