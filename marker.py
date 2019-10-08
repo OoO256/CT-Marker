@@ -5,67 +5,80 @@ import difflib
 import re
 import json
 
+class Student:
+    def __init__(self):
+        self.name = ""
+        self.id = 0
+        self.right = False
+        self.did_submissoin = False
+        self.runtime_error = False
+        self.answer = ""
 
 def getAnswer(prob_input, path_solution):
     return check_output([sys.executable, path_solution],
                     input=prob_input,
-                    universal_newlines=True,
-                    shell=True,
-                    encoding='utf-8')
+                    universal_newlines=True)
 
-def mark(prob_input, path_hw, path_solution):
+def show(students, right_answer):
+    for student in students:
+        print(student.id, student.name)
+
+        if student.right:
+            print("정답")
+        else:
+            print("오답")
+            if student.runtime_error:
+                print("런타임 에러")
+            else:
+                d = difflib.Differ()
+                result = list(d.compare(right_answer.splitlines(keepends=True), student.answer.splitlines(keepends=True)))
+                sys.stdout.writelines(result)
+        print("")
+        print('-'*80)
+        print("")
+
+def mark(prob_input, filepaths, path_solution):
     print('만든사람 이용욱, qjrmsktso2@gmail.com')
     print('채점 결과에 대해 어떠한 책임도 지지 않습니다.')
     print('\n'+'-'*80)
-    
-    runtime_error_list = []
-    wrong_dict = {}
-    not_submit_list = []
 
-    prob_answer = getAnswer(prob_input, path_solution)
-    for file in os.listdir(path_hw):
+    students = []
+    right_answer = getAnswer(prob_input, path_solution)
+
+    for file in filepaths:
+        _, filename = os.path.split(file)
+        
         ct_file_checker = re.compile("\[.{2,3}-\d{8}\](.*)\.py")
-        if ct_file_checker.match(file) == None:
-            print(file,": 컴퓨팅사고력 양식에 맞지 않습니다.")
+        if ct_file_checker.match(filename) == None:
+            print(filename,": 컴퓨팅사고력 양식에 맞지 않습니다.")
             continue
         
-        name = re.search(r'\[(.*?)-', file).group(0)[1:-1]
-        id = re.search(r'-(.*?)\]', file).group(0)[1:-1]        
+        student = Student()
+        student.name = re.search(r'\[(.*?)-', filename).group(0)[1:-1]
+        student.id = re.search(r'-(.*?)\]', filename).group(0)[1:-1]
 
         try:
-            output = check_output([sys.executable, path_hw+'/'+file],
+            student.answer = check_output([sys.executable, file],
                 input=prob_input,
                 universal_newlines=True)
     
-            if prob_answer == output:
-                print('정답')
+            if right_answer == student.answer:
+                student.right = True
             else:
-                print('오답')
-                wrong_dict[name] = output
-                
-        except:
-            print('runtime error')
-            runtime_error_list.append(name)
-    
-    print('\n'+'-'*80)
-    print("런타임 에러 리스트 : ",runtime_error_list)
-    print("오답리스트 : ",wrong_dict.keys())
-    
-    print('\n'+'-'*80)
-    print('오답을 학생 이름, 답안, 정답 순으로 출력합니다')
-    for name, answer in wrong_dict.items():
-        print()
-        print('-'*20)
-        print(name)
-        #print(answer)
-        #print(prob_answer)
+                student.right = False
 
-        d = difflib.Differ()
-        result = list(d.compare(prob_answer.splitlines(keepends=True), answer.splitlines(keepends=True)))
-        sys.stdout.writelines(result)
+        except:
+            student.right = False
+            student.runtime_error = True
+
+        students.append(student)
+    
+    print('\n'+'-'*80)    
+    show(students, right_answer)
+
 
 if __name__ == "__main__":
-
+    '''
     if ".config.json" in os.listdir():
         print("이전 설정이 있습니다.")
         with open(".config.json") as f:
@@ -89,3 +102,4 @@ if __name__ == "__main__":
         }
         with open(".config.json", 'w') as outfile:
             json.dump(config, outfile, ensure_ascii = False, indent=4)
+            '''

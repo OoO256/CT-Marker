@@ -14,28 +14,22 @@ class MyApp(QWidget):
         self.lines = {}
         self.inputs = []
 
-        self.path_hw = ''
-        self.path_excel = ''
+        self.filepaths = []
         self.path_solution = ''
-        self.num_stu = 0
 
         self.init_UI()
-
 
     def init_UI(self):
         self.grid = QGridLayout()
         self.setLayout(self.grid)
 
         self.addLine(0, 'submit', '체점할 폴더 : ', 'line', button='선택',  callback=self.get_path_hw)
-        self.addLine(1, 'filename', '파일명 양식 : ', 'line')
-        self.addLine(2, 'excel', '학생 정보 엑셀 파일 : ', 'line', button='선택', callback=self.get_path_excel)
-        self.addLine(3, 'num_stu', '학생 수 : ', 'line')
-        self.addLine(4, 'solution', '정답 코드 파일 : ', 'line', button='선택', callback=self.get_path_solution)
-        self.addLine(5, 'input1', '입력 1 : ', 'text')
-        self.addLine(6, 'input1', '입력 2 : ', 'text')
-        self.addLine(7, 'input1', '입력 3 : ', 'text')
-        self.addLine(8, 'input1', '입력 4 : ', 'text')
-        self.grid.addWidget(self.buttons['mark'], 9, 0)
+        self.addLine(1, 'solution', '정답 코드 파일 : ', 'line', button='선택', callback=self.get_path_solution)
+        self.addLine(2, 'input1', '입력 1 : ', 'text')
+        self.addLine(3, 'input1', '입력 2 : ', 'text')
+        self.addLine(4, 'input1', '입력 3 : ', 'text')
+        self.addLine(5, 'input1', '입력 4 : ', 'text')
+        self.grid.addWidget(self.buttons['mark'], 6, 0)
 
         self.setWindowTitle('CT marker')
         self.setGeometry(300, 300, 300, 200)
@@ -60,34 +54,26 @@ class MyApp(QWidget):
             self.buttons[name].clicked.connect(callback)
 
     def get_path_hw(self):
-        self.path_hw = str(QFileDialog.getExistingDirectory(self, "Select Directory"))
-        self.lines['submit'].setText(self.path_hw)
-
-    def get_path_excel(self):
-        self.path_excel = str(QFileDialog.getOpenFileName(self,"get_path_excel", "" ,"Excel Files (*.xlsx)")[0])
-        self.lines['excel'].setText(self.path_excel)
+        caption = 'Open file'
+        directory = './'
+        filter_mask = "Python/Text files (*.py *.pyw *.txt)"
+        self.filepaths = QFileDialog.getOpenFileNames(None, caption, directory, filter_mask)[0]
+        self.lines['submit'].setText("got it!")
 
     def get_path_solution(self):
         self.path_solution = str(QFileDialog.getOpenFileName(self, "get_path_solution", "", "Python Files (*.py)")[0])
         self.lines['solution'].setText(self.path_solution)
 
     def mark(self):
-        string_stu = self.lines['num_stu'].text()
-        try:
-            self.num_stu = int(string_stu)
-        except:
-            print("잘못된 학생수입니다.")
-            pass
-
-        file_form = self.lines['filename'].text()
         for i in range(4):
             if self.inputs[i].toPlainText() is '':
                 break
 
             prob_inputs = self.inputs[i].toPlainText().split('//')
             prob_inputs = '\n'.join(prob_inputs)
+            # ??
 
-            marker.mark(prob_input=prob_inputs, path_hw = self.path_hw, path_excel = self.path_excel, path_solution = self.path_solution, hw_filename = file_form, num_std = self.num_stu)
+            marker.mark(prob_input=prob_inputs, filepaths = self.filepaths, path_solution = self.path_solution)
 
 
 if __name__ == '__main__':
