@@ -23,7 +23,7 @@ class MyApp(QWidget):
         self.grid = QGridLayout()
         self.setLayout(self.grid)
 
-        self.addLine(0, 'submit', '체점할 폴더 : ', 'line', button='선택',  callback=self.get_path_hw)
+        self.addLine(0, 'submit', '체점할 파일들 : ', 'line', button='선택',  callback=self.get_path_hw)
         self.addLine(1, 'solution', '정답 코드 파일 : ', 'line', button='선택', callback=self.get_path_solution)
         self.addLine(2, 'input1', '입력 1 : ', 'text')
         self.addLine(3, 'input1', '입력 2 : ', 'text')
