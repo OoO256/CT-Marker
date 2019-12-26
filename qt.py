@@ -1,20 +1,18 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QLabel, QLineEdit, QTextEdit, QFileDialog, QMainWindow, QInputDialog, QPushButton
+from PyQt5.QtWidgets import QComboBox, QApplication, QWidget, QGridLayout, QLabel, QLineEdit, QTextEdit, QFileDialog, QMainWindow, QInputDialog, QPushButton
 import marker
-
+import functools
 
 class MyApp(QWidget):
 
     def __init__(self):
         super().__init__()
 
-        self.buttons = {}
-        self.buttons['mark'] = QPushButton('mark', self)
-        self.buttons['mark'].clicked.connect(self.mark)
+        self.format_assignments = ""
         self.lines = {}
         self.inputs = []
 
-        self.filepaths = []
+        self.path_assignments = []
         self.path_solution = ''
 
         self.init_UI()
@@ -29,7 +27,16 @@ class MyApp(QWidget):
         self.addLine(3, 'input1', '입력 2 : ', 'text')
         self.addLine(4, 'input1', '입력 3 : ', 'text')
         self.addLine(5, 'input1', '입력 4 : ', 'text')
-        self.grid.addWidget(self.buttons['mark'], 6, 0)
+
+        combo = QComboBox(self)
+        combo.addItem("Python")
+        combo.addItem("C")
+        combo.activated[str].connect(self.on_combo_changed)
+        self.grid.addWidget(combo, 6, 0)
+
+        btn_mark = QPushButton('채점', self)
+        btn_mark.clicked.connect(self.mark)
+        self.grid.addWidget(btn_mark, 6, 1)
 
         self.setWindowTitle('CT marker')
         self.setGeometry(300, 300, 300, 200)
@@ -48,23 +55,26 @@ class MyApp(QWidget):
             self.grid.addWidget(self.inputs[len(self.inputs) - 1], idx, 1)
 
         if button is not None:
-            self.buttons[name] = QPushButton(button, self)
-            self.grid.addWidget(self.buttons[name], idx, 2)
+            btn = QPushButton(button, self)
+            self.grid.addWidget(btn, idx, 2)
 
-            self.buttons[name].clicked.connect(callback)
+            btn.clicked.connect(callback)
 
     def get_path_hw(self):
         caption = 'Open file'
         directory = './'
         filter_mask = "Python/Text files (*.py *.pyw *.txt)"
-        self.filepaths = QFileDialog.getOpenFileNames(None, caption, directory, filter_mask)[0]
+        self.path_assignments = QFileDialog.getOpenFileNames(None, caption, directory, filter_mask)[0]
         self.lines['submit'].setText("got it!")
 
     def get_path_solution(self):
         self.path_solution = str(QFileDialog.getOpenFileName(self, "get_path_solution", "", "Python Files (*.py)")[0])
         self.lines['solution'].setText(self.path_solution)
 
-    def mark(self):
+    def on_combo_changed(self, text):
+        self.format_assignments = text
+
+    def mark(self, type):
         for i in range(4):
             if self.inputs[i].toPlainText() is '':
                 break
@@ -73,7 +83,7 @@ class MyApp(QWidget):
             prob_inputs = '\n'.join(prob_inputs)
             # ??
 
-            marker.mark(prob_input=prob_inputs, filepaths = self.filepaths, path_solution = self.path_solution)
+            marker.mark(prob_input=prob_inputs, path_assignments = self.path_assignments, path_solution = self.path_solution, type = type)
 
 
 if __name__ == '__main__':
