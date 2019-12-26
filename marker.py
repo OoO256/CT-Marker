@@ -38,7 +38,7 @@ def show(students, right_answer):
         print('-'*80)
         print("")
 
-def mark(prob_input, path_assignments, path_solution):
+def mark(prob_input, path_assignments, path_solution, format):
     print('만든사람 이용욱, qjrmsktso2@gmail.com')
     print('채점 결과에 대해 어떠한 책임도 지지 않습니다.')
     print('\n'+'-'*80)
@@ -57,11 +57,16 @@ def mark(prob_input, path_assignments, path_solution):
         student = Student()
         student.name = re.search(r'\[(.*?)-', filename).group(0)[1:-1]
         student.id = re.search(r'-(.*?)\]', filename).group(0)[1:-1]
+        student.code = open(file).readlines()
 
         try:
-            student.answer = check_output([sys.executable, file],
-                input=prob_input,
-                universal_newlines=True)
+            if format == "Python":
+                student.answer = check_output([sys.executable, file],
+                    input=prob_input,
+                    universal_newlines=True)
+            elif format = "C":
+                subprocess.run(["gcc", "-o", filename+".o", file])
+
     
             if right_answer == student.answer:
                 student.right = True

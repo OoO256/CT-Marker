@@ -74,7 +74,7 @@ class MyApp(QWidget):
     def on_combo_changed(self, text):
         self.format_assignments = text
 
-    def mark(self, type):
+    def mark(self):
         for i in range(4):
             if self.inputs[i].toPlainText() is '':
                 break
@@ -83,7 +83,7 @@ class MyApp(QWidget):
             prob_inputs = '\n'.join(prob_inputs)
             # ??
 
-            marker.mark(prob_input=prob_inputs, path_assignments = self.path_assignments, path_solution = self.path_solution, type = type)
+            marker.mark(prob_input=prob_inputs, path_assignments = self.path_assignments, path_solution = self.path_solution, format = self.format_assignments)
 
 
 if __name__ == '__main__':
