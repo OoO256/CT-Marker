@@ -1,5 +1,6 @@
 import os
 import sys
+import subprocess
 from subprocess import check_output
 import difflib
 import re
@@ -49,10 +50,12 @@ def mark(prob_input, path_assignments, path_solution, format):
     for file in path_assignments:
         _, filename = os.path.split(file)
         
+        '''
         ct_file_checker = re.compile("\[.{2,3}-\d{8}\](.*)\.py")
         if ct_file_checker.match(filename) == None:
             print(filename,": 컴퓨팅사고력 양식에 맞지 않습니다.")
             continue
+        '''
         
         student = Student()
         student.name = re.search(r'\[(.*?)-', filename).group(0)[1:-1]
@@ -64,8 +67,11 @@ def mark(prob_input, path_assignments, path_solution, format):
                 student.answer = check_output([sys.executable, file],
                     input=prob_input,
                     universal_newlines=True)
-            elif format = "C":
-                subprocess.run(["gcc", "-o", filename+".o", file])
+            elif format == "C":
+                subprocess.check_call(u'gcc "' + file + '" -o "' + file[:-2] + '"')
+                student.answer = check_output('"'+file[:-2] + '.exe"',
+                    input=prob_input,
+                    universal_newlines=True)
 
     
             if right_answer == student.answer:

@@ -62,8 +62,8 @@ class MyApp(QWidget):
 
     def get_path_hw(self):
         caption = 'Open file'
-        directory = './'
-        filter_mask = "Python/Text files (*.py *.pyw *.txt)"
+        directory = '../'
+        filter_mask = "Python/C files (*.py *.pyw *.c *.cpp)"
         self.path_assignments = QFileDialog.getOpenFileNames(None, caption, directory, filter_mask)[0]
         self.lines['submit'].setText("got it!")
 
