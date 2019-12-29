@@ -1,14 +1,12 @@
 import sys
-from PyQt5.QtWidgets import QComboBox, QApplication, QWidget, QGridLayout, QLabel, QLineEdit, QTextEdit, QFileDialog, QMainWindow, QInputDialog, QPushButton
+from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QLabel, QLineEdit, QTextEdit, QFileDialog, QPushButton
 import marker
-import functools
 
 class MyApp(QWidget):
 
     def __init__(self):
         super().__init__()
 
-        self.format_assignments = ""
         self.lines = {}
         self.inputs = []
 
@@ -28,11 +26,14 @@ class MyApp(QWidget):
         self.addLine(4, 'input1', '입력 3 : ', 'text')
         self.addLine(5, 'input1', '입력 4 : ', 'text')
 
+        '''
         combo = QComboBox(self)
+        combo.addItem("과제 형식 선택")
         combo.addItem("Python")
         combo.addItem("C")
         combo.activated[str].connect(self.on_combo_changed)
         self.grid.addWidget(combo, 6, 0)
+        '''
 
         btn_mark = QPushButton('채점', self)
         btn_mark.clicked.connect(self.mark)
@@ -68,13 +69,11 @@ class MyApp(QWidget):
         self.lines['submit'].setText("got it!")
 
     def get_path_solution(self):
-        self.path_solution = str(QFileDialog.getOpenFileName(self, "get_path_solution", "", "Python Files (*.py)")[0])
+        self.path_solution = str(QFileDialog.getOpenFileName(self, "get_path_solution", "", "Python/C files (*.py *.pyw *.c *.cpp)")[0])
         self.lines['solution'].setText(self.path_solution)
 
-    def on_combo_changed(self, text):
-        self.format_assignments = text
-
     def mark(self):
+
         for i in range(4):
             if self.inputs[i].toPlainText() is '':
                 break
@@ -83,7 +82,7 @@ class MyApp(QWidget):
             prob_inputs = '\n'.join(prob_inputs)
             # ??
 
-            marker.mark(prob_input=prob_inputs, path_assignments = self.path_assignments, path_solution = self.path_solution, format = self.format_assignments)
+            marker.mark(prob_input=prob_inputs, path_assignments = self.path_assignments, path_solution = self.path_solution)
 
 
 if __name__ == '__main__':
