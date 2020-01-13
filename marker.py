@@ -23,29 +23,36 @@ def get_output(path, input):
     f = format(path)
 
     if f == "py":
-        return subprocess.check_output([sys.executable, path],
+        try:
+            return subprocess.check_output([sys.executable, path],
             input = input,
             universal_newlines=True)
+        except:
+            raise Exception("에러")
+
     elif f == "c":
         try:
             subprocess.check_call(u'gcc "' + path + '" -o "' + path[:-2] + '.exe"')
         except:
-            raise SyntaxError
-
+            raise Exception("컴파일 에러")
 
         try:
-            p = subprocess.run(u'"'+path[:-2] + '.exe"', stdout=subprocess.PIPE, input=input, universal_newlines=True)
+            p = subprocess.run(u'"'+path[:-2] + '.exe"', stdout=subprocess.PIPE, input=input, universal_newlines=True, timeout=15)
 
             if p.stderr != None:
-                raise SyntaxError
+                raise Exception("런타임 에러")
         except:
-            raise SyntaxError
+            raise Exception("런타임 에러")
 
         return p.stdout
 
 def show(students, right_answer):
     for student in students:
         print(student.id, student.name)
+
+        print("학생 코드", "-"*75)
+        print(student.code)
+        print("-"*80)
 
         if student.right:
             print("정답")
@@ -69,8 +76,8 @@ def mark(prob_input, path_assignments, path_solution):
     students = []
     try:
         right_answer = get_output(path_solution, prob_input)
-    except :
-        print("답안 에러")
+    except Exception as e:
+        print('솔루션', e)
         return
 
     for file in path_assignments:
@@ -84,14 +91,14 @@ def mark(prob_input, path_assignments, path_solution):
         student = Student()
         student.name = re.search(r'\[(.*?)-', filename).group(0)[1:-1]
         student.id = re.search(r'-(.*?)\]', filename).group(0)[1:-1]
-        student.code = open(file).readlines()
+        student.code = "".join(open(file).readlines())
 
 
         try:
             student.answer = get_output(file, prob_input)
             student.right = (right_answer == student.answer)
 
-        except:
+        except Exception as e:
             student.right = False
             student.runtime_error = True
 

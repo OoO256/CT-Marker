@@ -26,15 +26,6 @@ class MyApp(QWidget):
         self.addLine(4, 'input1', '입력 3 : ', 'text')
         self.addLine(5, 'input1', '입력 4 : ', 'text')
 
-        '''
-        combo = QComboBox(self)
-        combo.addItem("과제 형식 선택")
-        combo.addItem("Python")
-        combo.addItem("C")
-        combo.activated[str].connect(self.on_combo_changed)
-        self.grid.addWidget(combo, 6, 0)
-        '''
-
         btn_mark = QPushButton('채점', self)
         btn_mark.clicked.connect(self.mark)
         self.grid.addWidget(btn_mark, 6, 1)
