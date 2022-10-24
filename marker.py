@@ -5,6 +5,7 @@ from subprocess import Popen
 import difflib
 import re
 import json
+import pdb
 
 class Student:
     def __init__(self):
@@ -46,14 +47,14 @@ def get_output(path, input):
 
         return p.stdout
 
-def show(students, right_answer):
+def show(students, right_answer, skip_code=True):
     for student in students:
         print(student.id, student.name)
-
-        print("학생 코드", "-"*75)
-        print(student.code)
-        print("-"*80)
-
+        if skip_code == False:
+            print("학생 코드", "-"*75)
+            print(student.code)
+            print("-"*80)
+        
         if student.right:
             print("정답")
         else:
@@ -69,7 +70,7 @@ def show(students, right_answer):
         print("")
 
 def mark(prob_input, path_assignments, path_solution):
-    print('만든사람 이용욱, qjrmsktso2@gmail.com')
+    # print('만든사람 이용욱, qjrmsktso2@gmail.com')
     print('채점 결과에 대해 어떠한 책임도 지지 않습니다.')
     print('\n'+'-'*80)
 
@@ -83,16 +84,17 @@ def mark(prob_input, path_assignments, path_solution):
     for file in path_assignments:
         _, filename = os.path.split(file)
 
-        ct_file_checkers = [re.compile("\[.{2,3}-\d{8}\](.*)\.py"), re.compile("\[.{2,3}-\d{8}\](.*)\.c")]
+        ct_file_checkers = [re.compile("\w{2,3}-\d{8}.*.py"),re.compile("\d{8}-\w{2,3}.*.py")]
+        print(filename)
         if ct_file_checkers[0].match(filename) == None and ct_file_checkers[1].match(filename) == None:
             print(filename,": 파일명 양식이 맞지 않습니다.")
             continue
         
         student = Student()
-        student.name = re.search(r'\[(.*?)-', filename).group(0)[1:-1]
-        student.id = re.search(r'-(.*?)\]', filename).group(0)[1:-1]
-        student.code = "".join(open(file).readlines())
-
+        student.name = re.search(r'(.*?)-', file).group(0)[:-1]
+        student.id = re.search(r'-(.*?)\_', file).group(0)[1:-1]
+        student.code = "".join(open(file, encoding='UTF8').readlines())
+        #student.code = "".join(open(file).readlines())
 
         try:
             student.answer = get_output(file, prob_input)
